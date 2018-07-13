@@ -3,20 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./vue.js"></script>
 </head>
 <body>
 <div id="app">
     {{ message }}
     <input type="text" v-model="message">
+
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+    <blog-post :style="{ fontSize: postFontSize + 'em' }"
+               v-for="post in posts"
+               v-bind:key="post.id"
+               v-bind:post="post"></blog-post>
 </div>
 <script>
+    Vue.component('blog-post', {
+        props: ['post'],
+        template: '<div class="blog-post">\n' +
+        '      <h3>{{ post.title }}</h3>\n' +
+        '      <button v-on:click="$emit(\'enlarge-text\')">\n' +
+        '        Enlarge text\n' +
+        '      </button>\n' +
+        '      <div v-html="post.content"></div>\n' +
+        '    </div>'
+    })
+    Vue.component('button-counter', {
+        data: function () {
+            return {
+                count: 0
+            }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    })
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello Vue!'
-        }
+            message: 'Hello Vue!',
+            posts: [
+                { id: 1, title: 'My journey with Vue' },
+                { id: 2, title: 'Blogging with Vue' },
+                { id: 3, title: 'Why Vue is so fun' },
+            ],
+            postFontSize: 1
+        },
+        beforeCreate:function(){console.log('beforeCreate')},
+        created:function(){console.log('created')},
+        beforeMount:function(){console.log('beforeMount')},
+        mounted:function(){console.log('mounted')},
+        beforeUpdate:function(){console.log('beforeUpdate')},
+        a:function(){console.log('updated')},
+        activated:function(){console.log('activated')},
+        deactivated:function(){console.log('deactivated')},
+        beforeDestroy:function(){console.log('beforeDestroy')},
+        destroyed:function(){console.log('destroyed')},
+        errorCaptured:function(){console.log('errorCaptured')},
     })
+
+
 </script>
 </body>
 </html>
